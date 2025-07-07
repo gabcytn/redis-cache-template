@@ -51,13 +51,18 @@ public class TeamController
 	@GetMapping("/{id}")
 	public ResponseEntity<TeamResponseDTO> getTeam (@PathVariable int id)
 	{
-		Optional<Team> team = teamRepository.findById(id);
-		if (team.isPresent()) {
-			Team teamPresent = team.get();
-			TeamResponseDTO teamResponseDTO = new TeamResponseDTO(teamPresent.getId(), teamPresent.getName());
-			return new ResponseEntity<>(teamResponseDTO, HttpStatus.OK);
+		try {
+			Optional<TeamResponseDTO> team = teamService.getTeam(id);
+			if (team.isPresent()) {
+				return new ResponseEntity<>(team.get(), HttpStatus.OK);
+			}
+
+			throw new Exception("Team not found");
+		} catch (Exception e) {
+			System.err.println("Error getting team");
+			System.err.println(e.getMessage());
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 
-		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	}
 }

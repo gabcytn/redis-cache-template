@@ -28,7 +28,6 @@ public class TeamService
 		this.objectMapper = objectMapper;
 	}
 
-
 	public List<TeamResponseDTO> getTeams () throws JsonProcessingException
 	{
 		Optional<CacheData> cacheData = teamCacheRepository.findById("teams");
@@ -62,5 +61,29 @@ public class TeamService
 		}
 
 		return teamResponseDTOList;
+	}
+
+	public Optional<TeamResponseDTO> getTeam (int id) throws JsonProcessingException
+	{
+		Optional<CacheData> cachedTeam = teamCacheRepository.findById("team-" + id);
+		if (cachedTeam.isPresent()) {
+			System.out.println("Cache hit!");
+			String teamAsString = cachedTeam.get().getValue();
+			TypeReference<TeamResponseDTO> mapType = new TypeReference<>() {};
+			return Optional.of(objectMapper.readValue(teamAsString, mapType));
+		}
+
+		System.out.println("Cache miss!");
+		Optional<Team> team = teamRepository.findById(id);
+		if (team.isPresent()) {
+			Team teamPresent = team.get();
+			TeamResponseDTO teamResponseDto = new TeamResponseDTO(teamPresent.getId(), teamPresent.getName());
+			// write to cache
+			String teamAsString = objectMapper.writeValueAsString(teamResponseDto);
+			teamCacheRepository.save(new CacheData("team-" + id, teamAsString));
+			return Optional.of(teamResponseDto);
+		}
+
+		return Optional.empty();
 	}
 }
