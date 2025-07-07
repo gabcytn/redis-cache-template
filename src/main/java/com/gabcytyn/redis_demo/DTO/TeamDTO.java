@@ -9,12 +9,14 @@ public class TeamDTO
 	@NotBlank
 	private String name;
 
-	public TeamDTO (String name)
+	public TeamDTO(String name)
 	{
 		this.name = name;
 	}
 
-	public TeamDTO () {}
+	public TeamDTO()
+	{
+	}
 
 	public String getName()
 	{

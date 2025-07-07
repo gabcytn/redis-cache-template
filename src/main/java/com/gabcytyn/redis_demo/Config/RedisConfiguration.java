@@ -16,38 +16,38 @@ import java.time.Duration;
 @EnableRedisRepositories("com.gabcytyn.redis_demo.Repository")
 public class RedisConfiguration
 {
-	@Bean
-	public LettuceConnectionFactory redisConnectionFactory ()
-	{
-		RedisProperties properties = redisProperties();
-		RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
+  @Bean
+  public LettuceConnectionFactory redisConnectionFactory()
+  {
+    RedisProperties properties = redisProperties();
+    RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
 
-		configuration.setHostName(properties.getHost());
-		configuration.setPort(properties.getPort());
+    configuration.setHostName(properties.getHost());
+    configuration.setPort(properties.getPort());
 
-		return new LettuceConnectionFactory(configuration);
-	}
+    return new LettuceConnectionFactory(configuration);
+  }
 
-	@Bean
-	public RedisTemplate<byte[], byte[]> redisTemplate()
-	{
-		RedisTemplate<byte[], byte[]> template = new RedisTemplate<>();
-		template.setConnectionFactory(redisConnectionFactory());
-		return template;
-	}
+  @Bean
+  public RedisTemplate<byte[], byte[]> redisTemplate()
+  {
+    RedisTemplate<byte[], byte[]> template = new RedisTemplate<>();
+    template.setConnectionFactory(redisConnectionFactory());
+    return template;
+  }
 
-	@Bean
-	public RedisCacheConfiguration cacheConfiguration ()
-	{
-		return RedisCacheConfiguration.defaultCacheConfig()
-						.entryTtl(Duration.ofMinutes(5))
-						.disableCachingNullValues();
-	}
+  @Bean
+  public RedisCacheConfiguration cacheConfiguration()
+  {
+    return RedisCacheConfiguration.defaultCacheConfig()
+        .entryTtl(Duration.ofMinutes(5))
+        .disableCachingNullValues();
+  }
 
-	@Bean
-	@Primary
-	public RedisProperties redisProperties ()
-	{
-		return new RedisProperties();
-	}
+  @Bean
+  @Primary
+  public RedisProperties redisProperties()
+  {
+    return new RedisProperties();
+  }
 }

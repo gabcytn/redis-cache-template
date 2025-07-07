@@ -4,7 +4,9 @@ public class ErrorResponse
 {
 	private String message;
 
-	public ErrorResponse() {}
+	public ErrorResponse()
+	{
+	}
 
 	public ErrorResponse(String message)
 	{
@@ -25,7 +27,7 @@ public class ErrorResponse
 	public String toString()
 	{
 		return "ErrorResponse{" +
-						"message='" + message + '\'' +
-						'}';
+				"message='" + message + '\'' +
+				'}';
 	}
 }

@@ -51,9 +51,9 @@ public class Player
 	public String toString()
 	{
 		return "Player{" +
-						"id=" + id +
-						", fullName='" + fullName + '\'' +
-						", team=" + team +
-						'}';
+				"id=" + id +
+				", fullName='" + fullName + '\'' +
+				", team=" + team +
+				'}';
 	}
 }

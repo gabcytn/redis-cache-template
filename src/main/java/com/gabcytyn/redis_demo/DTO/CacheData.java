@@ -10,7 +10,9 @@ public class CacheData
 	private String key;
 	private String value;
 
-	public CacheData() {}
+	public CacheData()
+	{
+	}
 
 	public CacheData(String key, String value)
 	{
@@ -42,8 +44,8 @@ public class CacheData
 	public String toString()
 	{
 		return "CacheData{" +
-						"key='" + key + '\'' +
-						", value=" + value +
-						'}';
+				"key='" + key + '\'' +
+				", value=" + value +
+				'}';
 	}
 }

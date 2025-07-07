@@ -5,7 +5,9 @@ public class TeamResponseDTO
 	private Integer id;
 	private String name;
 
-	public TeamResponseDTO() {}
+	public TeamResponseDTO()
+	{
+	}
 
 	public TeamResponseDTO(Integer id, String name)
 	{

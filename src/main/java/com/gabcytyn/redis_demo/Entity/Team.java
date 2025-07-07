@@ -52,9 +52,9 @@ public class Team
 	public String toString()
 	{
 		return "Team{" +
-						"id=" + id +
-						", name='" + name + '\'' +
-						", players=" + players +
-						'}';
+				"id=" + id +
+				", name='" + name + '\'' +
+				", players=" + players +
+				'}';
 	}
 }
