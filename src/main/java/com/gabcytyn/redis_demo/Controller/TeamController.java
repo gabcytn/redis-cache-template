@@ -4,12 +4,12 @@ import com.gabcytyn.redis_demo.DTO.TeamDTO;
 import com.gabcytyn.redis_demo.DTO.TeamResponseDTO;
 import com.gabcytyn.redis_demo.Entity.Team;
 import com.gabcytyn.redis_demo.Repository.TeamRepository;
+import com.gabcytyn.redis_demo.Service.TeamService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,10 +18,12 @@ import java.util.Optional;
 public class TeamController
 {
 	private final TeamRepository teamRepository;
+	private final TeamService teamService;
 
-	public TeamController (TeamRepository teamRepository)
+	public TeamController (TeamRepository teamRepository, TeamService teamService)
 	{
 		this.teamRepository = teamRepository;
+		this.teamService = teamService;
 	}
 
 	@PostMapping
@@ -35,15 +37,15 @@ public class TeamController
 	}
 
 	@GetMapping
-	public ResponseEntity<List<TeamResponseDTO>> getTeams ()
+	public ResponseEntity<List<TeamResponseDTO>> getTeams()
 	{
-		List<Team> teams = teamRepository.findAll();
-		List<TeamResponseDTO> teamResponseDTOList = new ArrayList<>();
-		for (Team team : teams) {
-			TeamResponseDTO teamResponseDTO = new TeamResponseDTO(team.getId(), team.getName());
-			teamResponseDTOList.add(teamResponseDTO);
+		try {
+			return new ResponseEntity<>(teamService.getTeams(), HttpStatus.OK);
+		} catch (Exception e) {
+			System.err.println("Error getting list of teams!");
+			System.err.println(e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<>(teamResponseDTOList, HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
