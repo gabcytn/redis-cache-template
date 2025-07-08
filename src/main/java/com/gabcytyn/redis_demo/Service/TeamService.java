@@ -55,7 +55,7 @@ public class TeamService
     // save db query in cache
     try {
       String teamsAsString = objectMapper.writeValueAsString(teamResponseDTOList);
-      teamCacheRepository.save(new CacheData("teams", teamsAsString));
+      teamCacheRepository.save(new CacheData("teams", teamsAsString, 60L));
       System.out.println("Successfully saved in cache!");
     } catch (Exception e) {
       System.err.println("Failed to save query in cache!");
@@ -84,7 +84,7 @@ public class TeamService
       TeamResponseDTO teamResponseDto = new TeamResponseDTO(teamPresent.getId(), teamPresent.getName());
       // write to cache
       String teamAsString = objectMapper.writeValueAsString(teamResponseDto);
-      teamCacheRepository.save(new CacheData("team-" + id, teamAsString));
+      teamCacheRepository.save(new CacheData("team-" + id, teamAsString, 180L));
       return Optional.of(teamResponseDto);
     }
 
