@@ -8,30 +8,26 @@ import com.gabcytyn.redis_demo.Entity.Team;
 import com.gabcytyn.redis_demo.Repository.PlayerRepository;
 import com.gabcytyn.redis_demo.Repository.TeamRepository;
 import jakarta.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/api/v1/players")
-public class PlayerController
-{
+public class PlayerController {
   private final PlayerRepository playerRepository;
   private final TeamRepository teamRepository;
 
-  public PlayerController(PlayerRepository playerRepository, TeamRepository teamRepository)
-  {
+  public PlayerController(PlayerRepository playerRepository, TeamRepository teamRepository) {
     this.playerRepository = playerRepository;
     this.teamRepository = teamRepository;
   }
 
   @PostMapping
-  public ResponseEntity<ErrorResponse> createPlayer(@RequestBody @Valid PlayerDTO playerDTO)
-  {
+  public ResponseEntity<ErrorResponse> createPlayer(@RequestBody @Valid PlayerDTO playerDTO) {
     Player player = new Player();
     player.setFullName(playerDTO.getFullName());
 
@@ -46,37 +42,31 @@ public class PlayerController
   }
 
   @GetMapping
-  public ResponseEntity<List<PlayerResponseDTO>> getPlayers()
-  {
+  public ResponseEntity<List<PlayerResponseDTO>> getPlayers() {
     List<Player> players = playerRepository.findAll();
     List<PlayerResponseDTO> playerResponseDTOList = new ArrayList<>();
     for (Player player : players) {
-      PlayerResponseDTO playerResponseDTO = new PlayerResponseDTO(
-          player.getId(),
-          player.getFullName(),
-          player.getTeam().getName()
-      );
+      PlayerResponseDTO playerResponseDTO =
+          new PlayerResponseDTO(player.getId(), player.getFullName(), player.getTeam().getName());
       playerResponseDTOList.add(playerResponseDTO);
     }
     return new ResponseEntity<>(playerResponseDTOList, HttpStatus.OK);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<PlayerResponseDTO> getPlayer(@PathVariable int id)
-  {
+  public ResponseEntity<PlayerResponseDTO> getPlayer(@PathVariable int id) {
     Optional<Player> optionalPlayer = playerRepository.findById(id);
     if (optionalPlayer.isPresent()) {
       Player currentPlayer = optionalPlayer.get();
-      PlayerResponseDTO player = new PlayerResponseDTO(
-          currentPlayer.getId(),
-          currentPlayer.getFullName(),
-          currentPlayer.getTeam().getName()
-      );
+      PlayerResponseDTO player =
+          new PlayerResponseDTO(
+              currentPlayer.getId(),
+              currentPlayer.getFullName(),
+              currentPlayer.getTeam().getName());
 
       return new ResponseEntity<>(player, HttpStatus.OK);
     }
 
     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
   }
-
 }

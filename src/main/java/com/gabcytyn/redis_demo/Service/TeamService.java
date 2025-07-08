@@ -8,37 +8,34 @@ import com.gabcytyn.redis_demo.DTO.TeamResponseDTO;
 import com.gabcytyn.redis_demo.Entity.Team;
 import com.gabcytyn.redis_demo.Repository.TeamCacheRepository;
 import com.gabcytyn.redis_demo.Repository.TeamRepository;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.stereotype.Service;
 
 @Service
-public class TeamService
-{
+public class TeamService {
   private final TeamRepository teamRepository;
   private final TeamCacheRepository teamCacheRepository;
   private final ObjectMapper objectMapper;
 
-  public TeamService(TeamRepository teamRepository, TeamCacheRepository teamCacheRepository, ObjectMapper objectMapper)
-  {
+  public TeamService(
+      TeamRepository teamRepository,
+      TeamCacheRepository teamCacheRepository,
+      ObjectMapper objectMapper) {
     this.teamRepository = teamRepository;
     this.teamCacheRepository = teamCacheRepository;
     this.objectMapper = objectMapper;
   }
 
-  public List<TeamResponseDTO> getTeams() throws JsonProcessingException
-  {
+  public List<TeamResponseDTO> getTeams() throws JsonProcessingException {
     Optional<CacheData> cacheData = teamCacheRepository.findById("teams");
 
     // cache hit
     if (cacheData.isPresent()) {
       System.out.println("Cache hit!");
       String teamsAsString = cacheData.get().getValue();
-      TypeReference<List<TeamResponseDTO>> mapType = new TypeReference<>()
-      {
-      };
+      TypeReference<List<TeamResponseDTO>> mapType = new TypeReference<>() {};
       return objectMapper.readValue(teamsAsString, mapType);
     }
 
@@ -65,15 +62,12 @@ public class TeamService
     return teamResponseDTOList;
   }
 
-  public Optional<TeamResponseDTO> getTeam(int id) throws JsonProcessingException
-  {
+  public Optional<TeamResponseDTO> getTeam(int id) throws JsonProcessingException {
     Optional<CacheData> cachedTeam = teamCacheRepository.findById("team-" + id);
     if (cachedTeam.isPresent()) {
       System.out.println("Cache hit!");
       String teamAsString = cachedTeam.get().getValue();
-      TypeReference<TeamResponseDTO> mapType = new TypeReference<>()
-      {
-      };
+      TypeReference<TeamResponseDTO> mapType = new TypeReference<>() {};
       return Optional.of(objectMapper.readValue(teamAsString, mapType));
     }
 
@@ -81,7 +75,8 @@ public class TeamService
     Optional<Team> team = teamRepository.findById(id);
     if (team.isPresent()) {
       Team teamPresent = team.get();
-      TeamResponseDTO teamResponseDto = new TeamResponseDTO(teamPresent.getId(), teamPresent.getName());
+      TeamResponseDTO teamResponseDto =
+          new TeamResponseDTO(teamPresent.getId(), teamPresent.getName());
       // write to cache
       String teamAsString = objectMapper.writeValueAsString(teamResponseDto);
       teamCacheRepository.save(new CacheData("team-" + id, teamAsString, 180L));

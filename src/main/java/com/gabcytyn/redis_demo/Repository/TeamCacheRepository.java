@@ -5,7 +5,4 @@ import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TeamCacheRepository extends ListCrudRepository<CacheData, String>
-{
-
-}
+public interface TeamCacheRepository extends ListCrudRepository<CacheData, String> {}

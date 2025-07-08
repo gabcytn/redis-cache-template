@@ -5,7 +5,4 @@ import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TeamRepository extends ListCrudRepository<Team, Integer>
-{
-
-}
+public interface TeamRepository extends ListCrudRepository<Team, Integer> {}
